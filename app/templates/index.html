@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>AI Call Agent</title>
+    <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <h1>AI Call Agent</h1>
+            <p class="subtitle">
+                Upload audio → AI4Bharat STT → Summary → WhatsApp / Email Draft
+            </p>
+
+            <div class="form-block">
+                <label for="audioFile">Upload Audio</label>
+                <input type="file" id="audioFile" accept=".wav,.mp3,.m4a,.flac,.ogg,.aac,.mp4,.mpeg,.webm" />
+
+                <label for="outputType">Select Output</label>
+                <select id="outputType">
+                    <option value="whatsapp">Draft WhatsApp Message</option>
+                    <option value="email">Draft Email</option>
+                </select>
+
+                <button id="generateBtn" onclick="processAudio()">Generate</button>
+            </div>
+
+            <div id="status" class="status"></div>
+
+            <div class="section">
+                <h2>Transcript</h2>
+                <pre id="transcriptBox">No output yet.</pre>
+            </div>
+
+            <div class="section">
+                <h2>Summary</h2>
+                <pre id="summaryBox">No output yet.</pre>
+            </div>
+
+            <div class="section">
+                <h2>Draft</h2>
+                <pre id="draftBox">No output yet.</pre>
+            </div>
+
+            <div class="section">
+                <h2>Latency</h2>
+                <pre id="latencyBox">No output yet.</pre>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function processAudio() {
+            const fileInput = document.getElementById("audioFile");
+            const outputType = document.getElementById("outputType").value;
+            const statusBox = document.getElementById("status");
+            const btn = document.getElementById("generateBtn");
+
+            const transcriptBox = document.getElementById("transcriptBox");
+            const summaryBox = document.getElementById("summaryBox");
+            const draftBox = document.getElementById("draftBox");
+            const latencyBox = document.getElementById("latencyBox");
+
+            if (!fileInput.files.length) {
+                statusBox.innerText = "Please select an audio file first.";
+                statusBox.className = "status error";
+                return;
+            }
+
+            const file = fileInput.files[0];
+            const formData = new FormData();
+            formData.append("file", file);
+            formData.append("output_type", outputType);
+
+            btn.disabled = true;
+            btn.innerText = "Processing...";
+            statusBox.innerText = "Processing audio. Please wait...";
+            statusBox.className = "status loading";
+
+            transcriptBox.innerText = "Processing...";
+            summaryBox.innerText = "Processing...";
+            draftBox.innerText = "Processing...";
+            latencyBox.innerText = "Processing...";
+
+            try {
+                const response = await fetch("/process", {
+                    method: "POST",
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.error || "Something went wrong.");
+                }
+
+                transcriptBox.innerText = data.transcript;
+                summaryBox.innerText = data.summary;
+                draftBox.innerText = data.draft;
+                latencyBox.innerText = JSON.stringify(data.latency, null, 2);
+
+                statusBox.innerText = "Done successfully.";
+                statusBox.className = "status success";
+
+            } catch (error) {
+                transcriptBox.innerText = "No output.";
+                summaryBox.innerText = "No output.";
+                draftBox.innerText = "No output.";
+                latencyBox.innerText = "No output.";
+
+                statusBox.innerText = error.message;
+                statusBox.className = "status error";
+            } finally {
+                btn.disabled = false;
+                btn.innerText = "Generate";
+            }
+        }
+    </script>
+</body>
+</html>
