@@ -126,7 +126,7 @@ Example:
     UPLOAD_DIR=uploads
     
     GEMINI_API_KEY=your_api_key
-    GEMINI_MODEL=gemini-1.5-flash
+    GEMINI_MODEL=gemini-3-flash-preview
     
 ▶️ Running the Application
 
@@ -136,7 +136,7 @@ Start the server:
 
 If successful, you will see:
 
-    Uvicorn running on http://0.0.0.0:8000
+    Uvicorn running on http://127.0.0.1:8000
     
 🌐 Access the Application
 Open your browser:
