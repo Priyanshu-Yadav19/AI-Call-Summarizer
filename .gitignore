@@ -33,3 +33,9 @@ Thumbs.db
 # Cache
 .cache/
 .huggingface/
+
+
+.env
+uploads/
+venv/
+__pycache__/
