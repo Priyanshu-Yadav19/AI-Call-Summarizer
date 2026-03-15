@@ -7,8 +7,10 @@ load_dotenv()
 class Settings:
     APP_NAME: str = os.getenv("APP_NAME", "AI Call Agent")
     APP_VERSION: str = os.getenv("APP_VERSION", "1.0.0")
+
     DEBUG: bool = os.getenv("DEBUG", "false").lower() == "true"
-    HOST: str = os.getenv("HOST", "0.0.0.0")
+
+    HOST: str = os.getenv("HOST", "127.0.0.1")
     PORT: int = int(os.getenv("PORT", "8000"))
 
     GEMINI_API_KEY: str = os.getenv("GEMINI_API_KEY", "")
