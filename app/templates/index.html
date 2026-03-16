@@ -4,85 +4,680 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>AI Call Agent</title>
-    <link rel="stylesheet" href="/static/style.css" />
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    />
+
+    <style>
+        :root {
+            --bg-1: #081120;
+            --bg-2: #0d1830;
+            --bg-3: #111c38;
+            --card: rgba(17, 26, 48, 0.95);
+            --card-soft: rgba(21, 31, 58, 0.95);
+            --surface: #101a34;
+            --surface-2: #0c152b;
+            --border: rgba(255, 255, 255, 0.08);
+            --text: #eef4ff;
+            --muted: #9eb0d0;
+            --primary: #5b8cff;
+            --primary-2: #7a5cff;
+            --success: #22c55e;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --result-bg: #091326;
+            --shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: Inter, "Segoe UI", Arial, sans-serif;
+            background:
+                radial-gradient(circle at top left, rgba(91, 140, 255, 0.18), transparent 26%),
+                radial-gradient(circle at top right, rgba(122, 92, 255, 0.16), transparent 22%),
+                linear-gradient(160deg, var(--bg-1) 0%, var(--bg-2) 48%, #070d1b 100%);
+            color: var(--text);
+        }
+
+        .app-shell {
+            max-width: 1180px;
+            margin: 32px auto;
+            padding: 0 16px 24px;
+        }
+
+        .topbar {
+            margin-bottom: 24px;
+            text-align: center;
+        }
+
+        .brand-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border-radius: 999px;
+            border: 1px solid rgba(91, 140, 255, 0.28);
+            background: rgba(91, 140, 255, 0.09);
+            color: #d7e4ff;
+            font-size: 0.86rem;
+            margin-bottom: 14px;
+            backdrop-filter: blur(8px);
+        }
+
+        .title {
+            font-size: 2.7rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: var(--muted);
+            font-size: 1rem;
+            margin-bottom: 0;
+            max-width: 720px;
+            margin-inline: auto;
+            line-height: 1.7;
+        }
+
+        .main-card {
+            border: 1px solid var(--border);
+            background: linear-gradient(180deg, rgba(18, 28, 52, 0.96), rgba(10, 16, 31, 0.98));
+            border-radius: 28px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .top-panel {
+            padding: 30px;
+            border-bottom: 1px solid var(--border);
+            background: linear-gradient(180deg, rgba(255,255,255,0.025), rgba(255,255,255,0));
+        }
+
+        .panel-title {
+            font-size: 1.08rem;
+            font-weight: 700;
+            margin-bottom: 14px;
+            color: #f0f5ff;
+        }
+
+        .upload-area {
+            display: block;
+            border: 1.5px dashed rgba(255,255,255,0.12);
+            background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.015));
+            border-radius: 22px;
+            padding: 24px;
+            cursor: pointer;
+            transition: 0.25s ease;
+            min-height: 290px;
+        }
+
+        .upload-area:hover,
+        .upload-area.active {
+            border-color: rgba(91, 140, 255, 0.55);
+            background: linear-gradient(180deg, rgba(91, 140, 255, 0.10), rgba(122, 92, 255, 0.06));
+            transform: translateY(-2px);
+            box-shadow: 0 16px 36px rgba(0, 0, 0, 0.2);
+        }
+
+        .upload-icon {
+            width: 70px;
+            height: 70px;
+            display: grid;
+            place-items: center;
+            border-radius: 18px;
+            background: linear-gradient(135deg, rgba(91, 140, 255, 0.18), rgba(122, 92, 255, 0.15));
+            font-size: 1.9rem;
+            margin-bottom: 16px;
+        }
+
+        .upload-label {
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .upload-file {
+            color: var(--muted);
+            font-size: 0.95rem;
+            margin-bottom: 0;
+            word-break: break-word;
+            line-height: 1.6;
+        }
+
+        .quick-info {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 18px;
+        }
+
+        .info-pill {
+            padding: 8px 14px;
+            border-radius: 999px;
+            font-size: 0.82rem;
+            color: #e6eeff;
+            border: 1px solid rgba(255,255,255,0.07);
+            background: rgba(255,255,255,0.04);
+        }
+
+        .form-label {
+            color: #dfe7fb;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .form-select {
+            height: 56px;
+            border-radius: 16px;
+            background-color: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        .form-select:focus {
+            border-color: rgba(91, 140, 255, 0.6);
+            box-shadow: 0 0 0 0.2rem rgba(91, 140, 255, 0.18);
+            background-color: rgba(255,255,255,0.05);
+            color: var(--text);
+        }
+
+        .form-select option {
+            color: #111827;
+        }
+
+        .btn-generate {
+            height: 56px;
+            border: none;
+            border-radius: 16px;
+            font-weight: 700;
+            font-size: 1rem;
+            background: linear-gradient(135deg, var(--primary), var(--primary-2));
+            box-shadow: 0 16px 30px rgba(91, 140, 255, 0.24);
+            transition: 0.2s ease;
+        }
+
+        .btn-generate:hover {
+            background: linear-gradient(135deg, #4e82ff, #6d52ff);
+            transform: translateY(-1px);
+        }
+
+        .btn-generate:disabled {
+            opacity: 0.8;
+            transform: none;
+        }
+
+        .status-box {
+            display: none;
+            border-radius: 14px;
+            border: 1px solid transparent;
+            padding: 14px 16px;
+            font-weight: 600;
+            margin-top: 18px;
+        }
+
+        .status-box.info {
+            display: block;
+            background: rgba(91, 140, 255, 0.12);
+            border-color: rgba(91, 140, 255, 0.2);
+            color: #dbe7ff;
+        }
+
+        .status-box.success {
+            display: block;
+            background: rgba(34, 197, 94, 0.12);
+            border-color: rgba(34, 197, 94, 0.22);
+            color: #c7f6d7;
+        }
+
+        .status-box.error {
+            display: block;
+            background: rgba(239, 68, 68, 0.12);
+            border-color: rgba(239, 68, 68, 0.2);
+            color: #ffd0d0;
+        }
+
+        .processing-card {
+            display: none;
+            margin-top: 18px;
+            padding: 20px;
+            border-radius: 20px;
+            background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.015));
+            border: 1px solid var(--border);
+        }
+
+        .processing-top {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .processing-title {
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+
+        .processing-text {
+            color: var(--muted);
+            font-size: 0.93rem;
+        }
+
+        .progress {
+            margin-top: 16px;
+            height: 10px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 999px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            background: linear-gradient(90deg, var(--primary), var(--primary-2));
+            transition: width 0.4s ease;
+        }
+
+        .progress-bar.complete {
+            animation: none !important;
+        }
+
+        .elapsed {
+            margin-top: 10px;
+            color: var(--muted);
+            font-size: 0.9rem;
+        }
+
+        .results-panel {
+            padding: 30px;
+        }
+
+        .section-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 18px;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .section-subtitle {
+            color: var(--muted);
+            font-size: 0.93rem;
+            margin: 0;
+        }
+
+        .result-card {
+            height: 100%;
+            border: 1px solid var(--border);
+            background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.015));
+            border-radius: 22px;
+            overflow: hidden;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);
+        }
+
+        .result-header {
+            padding: 16px 18px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .result-title {
+            margin: 0;
+            font-size: 1rem;
+            font-weight: 700;
+        }
+
+        .copy-btn {
+            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.03);
+            color: #dbe7ff;
+            border-radius: 10px;
+            padding: 7px 12px;
+            font-size: 0.86rem;
+            font-weight: 600;
+            transition: 0.2s ease;
+        }
+
+        .copy-btn:hover {
+            background: rgba(91, 140, 255, 0.12);
+            border-color: rgba(91, 140, 255, 0.24);
+        }
+
+        .result-body {
+            padding: 0;
+        }
+
+        pre.result-box,
+        .latency-box {
+            margin: 0;
+            width: 100%;
+            min-height: 160px;
+            height: auto;
+            max-height: none;
+            overflow: visible;
+            white-space: pre-wrap;
+            word-break: break-word;
+            background: var(--result-bg);
+            color: #edf3ff;
+            padding: 18px;
+            line-height: 1.75;
+            font-size: 0.95rem;
+            border: 0;
+        }
+
+        .latency-box {
+            background: #0a1428;
+            color: #dce8ff;
+        }
+
+        .footer-note {
+            color: var(--muted);
+            font-size: 0.88rem;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .done-spinner {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            background: rgba(34, 197, 94, 0.12);
+            color: #9ff0bb;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        @media (max-width: 991px) {
+            .title {
+                font-size: 2.1rem;
+            }
+
+            .top-panel,
+            .results-panel {
+                padding: 20px;
+            }
+
+            .upload-area {
+                min-height: 240px;
+            }
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <div class="card">
-            <h1>AI Call Agent</h1>
+    <div class="app-shell">
+        <div class="topbar">
+            <div class="brand-badge">● AI Powered Audio Processing</div>
+            <h1 class="title">AI Call Summarizer Agent</h1>
             <p class="subtitle">
-                Upload audio → AI4Bharat STT → Summary → WhatsApp / Email Draft
+                Upload your call recording and generate a clean summary, customer-ready draft,
+                and latency details in one simple workflow.
             </p>
+        </div>
 
-            <div class="form-block">
-                <label for="audioFile">Upload Audio</label>
-                <input type="file" id="audioFile" accept=".wav,.mp3,.m4a,.flac,.ogg,.aac,.mp4,.mpeg,.webm" />
+        <div class="main-card">
+            <div class="top-panel">
+                <div class="row g-4 align-items-stretch">
+                    <div class="col-lg-5">
+                        <div class="panel-title">Upload Audio</div>
+                        <label for="audioFile" class="upload-area" id="uploadBox">
+                            <div class="upload-icon">🎧</div>
+                            <div class="upload-label">Choose audio file</div>
+                            <p class="upload-file" id="fileName">No file selected</p>
+                            <div class="quick-info">
+                                <span class="info-pill">Summary</span>
+                                <span class="info-pill">Draft</span>
+                                <span class="info-pill">Latency</span>
+                            </div>
+                        </label>
 
-                <label for="outputType">Select Output</label>
-                <select id="outputType">
-                    <option value="whatsapp">Draft WhatsApp Message</option>
-                    <option value="email">Draft Email</option>
-                </select>
+                        <input
+                            type="file"
+                            id="audioFile"
+                            class="d-none"
+                            accept=".wav,.mp3,.m4a,.flac,.ogg,.aac,.mp4,.mpeg,.webm"
+                        />
+                    </div>
 
-                <button id="generateBtn" onclick="processAudio()">Generate</button>
+                    <div class="col-lg-7">
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <label for="outputType" class="form-label">Output Type</label>
+                                <select id="outputType" class="form-select">
+                                    <option value="whatsapp">WhatsApp Draft</option>
+                                    <option value="email">Email Draft</option>
+                                </select>
+                            </div>
+
+                            <div class="col-12 d-grid">
+                                <button id="generateBtn" class="btn btn-primary btn-generate" onclick="processAudio()">
+                                    <span id="btnText">Generate Output</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div id="status" class="status-box"></div>
+
+                        <div id="processingCard" class="processing-card">
+                            <div class="processing-top">
+                                <div id="loadingSpinner" class="spinner-border text-primary" role="status"></div>
+                                <div id="doneSpinner" class="done-spinner">✓</div>
+
+                                <div>
+                                    <div class="processing-title">Processing audio</div>
+                                    <div class="processing-text" id="processingText">Preparing request...</div>
+                                </div>
+                            </div>
+
+                            <div class="progress">
+                                <div
+                                    id="progressFill"
+                                    class="progress-bar progress-bar-striped progress-bar-animated"
+                                    style="width: 8%;"
+                                ></div>
+                            </div>
+
+                            <div class="elapsed" id="elapsedTime">Elapsed time: 0s</div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <div id="status" class="status"></div>
+            <div class="results-panel">
+                <div class="section-head">
+                    <div>
+                        <h2 class="section-title">Generated Results</h2>
+                        <p class="section-subtitle">Your processed outputs will appear below.</p>
+                    </div>
+                </div>
 
-            <div class="section">
-                <h2>Transcript</h2>
-                <pre id="transcriptBox">No output yet.</pre>
-            </div>
+                <div class="row g-4">
+                    <div class="col-lg-5">
+                        <div class="result-card">
+                            <div class="result-header">
+                                <h2 class="result-title">Summary</h2>
+                                <button class="copy-btn" onclick="copyText('summaryBox', this)">Copy</button>
+                            </div>
+                            <div class="result-body">
+                                <pre id="summaryBox" class="result-box">No output yet.</pre>
+                            </div>
+                        </div>
+                    </div>
 
-            <div class="section">
-                <h2>Summary</h2>
-                <pre id="summaryBox">No output yet.</pre>
-            </div>
+                    <div class="col-lg-7">
+                        <div class="result-card">
+                            <div class="result-header">
+                                <h2 class="result-title">Draft</h2>
+                                <button class="copy-btn" onclick="copyText('draftBox', this)">Copy</button>
+                            </div>
+                            <div class="result-body">
+                                <pre id="draftBox" class="result-box">No output yet.</pre>
+                            </div>
+                        </div>
+                    </div>
 
-            <div class="section">
-                <h2>Draft</h2>
-                <pre id="draftBox">No output yet.</pre>
-            </div>
+                    <div class="col-12">
+                        <div class="result-card">
+                            <div class="result-header">
+                                <h2 class="result-title">Latency Details</h2>
+                                <button class="copy-btn" onclick="copyText('latencyBox', this)">Copy</button>
+                            </div>
+                            <div class="result-body">
+                                <pre id="latencyBox" class="latency-box">No output yet.</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-            <div class="section">
-                <h2>Latency</h2>
-                <pre id="latencyBox">No output yet.</pre>
+                <div class="footer-note">Clean UI for modern audio processing workflows.</div>
             </div>
         </div>
     </div>
 
     <script>
+        const audioFileInput = document.getElementById("audioFile");
+        const fileName = document.getElementById("fileName");
+        const uploadBox = document.getElementById("uploadBox");
+
+        audioFileInput.addEventListener("change", () => {
+            if (audioFileInput.files.length) {
+                fileName.textContent = audioFileInput.files[0].name;
+                uploadBox.classList.add("active");
+            } else {
+                fileName.textContent = "No file selected";
+                uploadBox.classList.remove("active");
+            }
+        });
+
+        function formatLatency(latency) {
+            if (!latency || typeof latency !== "object") {
+                return "No latency data available.";
+            }
+
+            return Object.entries(latency)
+                .map(([key, value]) => `• ${key.replaceAll("_", " ")}: ${value} sec`)
+                .join("\n");
+        }
+
+        async function copyText(elementId, btn) {
+            const text = document.getElementById(elementId).textContent;
+            try {
+                await navigator.clipboard.writeText(text);
+                const original = btn.textContent;
+                btn.textContent = "Copied";
+                setTimeout(() => {
+                    btn.textContent = original;
+                }, 1200);
+            } catch {
+                btn.textContent = "Failed";
+                setTimeout(() => {
+                    btn.textContent = "Copy";
+                }, 1200);
+            }
+        }
+
+        function stopProgressUI(success = true) {
+            const progressFill = document.getElementById("progressFill");
+            const loadingSpinner = document.getElementById("loadingSpinner");
+            const doneSpinner = document.getElementById("doneSpinner");
+            const processingText = document.getElementById("processingText");
+
+            progressFill.classList.remove("progress-bar-striped", "progress-bar-animated");
+            progressFill.classList.add("complete");
+
+            if (success) {
+                progressFill.style.width = "100%";
+                loadingSpinner.style.display = "none";
+                doneSpinner.style.display = "flex";
+                processingText.textContent = "Completed successfully.";
+            } else {
+                loadingSpinner.style.display = "none";
+                doneSpinner.style.display = "none";
+                processingText.textContent = "Processing stopped.";
+            }
+        }
+
         async function processAudio() {
             const fileInput = document.getElementById("audioFile");
             const outputType = document.getElementById("outputType").value;
             const statusBox = document.getElementById("status");
+            const processingCard = document.getElementById("processingCard");
+            const processingText = document.getElementById("processingText");
+            const progressFill = document.getElementById("progressFill");
+            const elapsedTime = document.getElementById("elapsedTime");
             const btn = document.getElementById("generateBtn");
+            const btnText = document.getElementById("btnText");
+            const loadingSpinner = document.getElementById("loadingSpinner");
+            const doneSpinner = document.getElementById("doneSpinner");
 
-            const transcriptBox = document.getElementById("transcriptBox");
             const summaryBox = document.getElementById("summaryBox");
             const draftBox = document.getElementById("draftBox");
             const latencyBox = document.getElementById("latencyBox");
 
             if (!fileInput.files.length) {
-                statusBox.innerText = "Please select an audio file first.";
-                statusBox.className = "status error";
+                statusBox.className = "status-box error";
+                statusBox.textContent = "Please choose an audio file.";
                 return;
             }
 
-            const file = fileInput.files[0];
             const formData = new FormData();
-            formData.append("file", file);
+            formData.append("file", fileInput.files[0]);
             formData.append("output_type", outputType);
 
             btn.disabled = true;
-            btn.innerText = "Processing...";
-            statusBox.innerText = "Processing audio. Please wait...";
-            statusBox.className = "status loading";
+            btnText.textContent = "Processing...";
+            statusBox.className = "status-box info";
+            statusBox.textContent = "Processing audio. Please wait...";
+            processingCard.style.display = "block";
 
-            transcriptBox.innerText = "Processing...";
-            summaryBox.innerText = "Processing...";
-            draftBox.innerText = "Processing...";
-            latencyBox.innerText = "Processing...";
+            loadingSpinner.style.display = "block";
+            doneSpinner.style.display = "none";
+
+            summaryBox.textContent = "Processing...";
+            draftBox.textContent = "Processing...";
+            latencyBox.textContent = "Processing...";
+
+            progressFill.style.width = "8%";
+            progressFill.classList.add("progress-bar-striped", "progress-bar-animated");
+            progressFill.classList.remove("complete");
+            processingText.textContent = "Uploading audio file...";
+
+            let seconds = 0;
+            const timer = setInterval(() => {
+                seconds += 1;
+                elapsedTime.textContent = `Elapsed time: ${seconds}s`;
+            }, 1000);
+
+            const progressTimers = [
+                setTimeout(() => {
+                    progressFill.style.width = "35%";
+                    processingText.textContent = "Analyzing conversation...";
+                }, 1500),
+                setTimeout(() => {
+                    progressFill.style.width = "70%";
+                    processingText.textContent = "Generating summary...";
+                }, 7000),
+                setTimeout(() => {
+                    progressFill.style.width = "90%";
+                    processingText.textContent = "Preparing final draft...";
+                }, 11000)
+            ];
 
             try {
                 const response = await fetch("/process", {
@@ -96,25 +691,31 @@
                     throw new Error(data.error || "Something went wrong.");
                 }
 
-                transcriptBox.innerText = data.transcript;
-                summaryBox.innerText = data.summary;
-                draftBox.innerText = data.draft;
-                latencyBox.innerText = JSON.stringify(data.latency, null, 2);
+                summaryBox.textContent = data.summary || "No summary available.";
+                draftBox.textContent = data.draft || "No draft available.";
+                latencyBox.textContent = formatLatency(data.latency);
 
-                statusBox.innerText = "Done successfully.";
-                statusBox.className = "status success";
+                clearInterval(timer);
+                progressTimers.forEach(clearTimeout);
+                stopProgressUI(true);
 
+                statusBox.className = "status-box success";
+                statusBox.textContent = "Completed successfully.";
             } catch (error) {
-                transcriptBox.innerText = "No output.";
-                summaryBox.innerText = "No output.";
-                draftBox.innerText = "No output.";
-                latencyBox.innerText = "No output.";
+                clearInterval(timer);
+                progressTimers.forEach(clearTimeout);
 
-                statusBox.innerText = error.message;
-                statusBox.className = "status error";
+                summaryBox.textContent = "No output.";
+                draftBox.textContent = "No output.";
+                latencyBox.textContent = "No output.";
+
+                stopProgressUI(false);
+
+                statusBox.className = "status-box error";
+                statusBox.textContent = error.message;
             } finally {
                 btn.disabled = false;
-                btn.innerText = "Generate";
+                btnText.textContent = "Generate Output";
             }
         }
     </script>
