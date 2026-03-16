@@ -31,14 +31,11 @@ This project is designed for sales calls, customer support calls, meeting record
 🧠 System Workflow
 
             User Uploads Audio
-                    │
-                    ▼
+                    │      
             Speech-to-Text Engine
                     │
-                    ▼
             Transcript Generation
                     │
-                    ▼
             LLM Analysis
                     │
                     ├── Call Summary
