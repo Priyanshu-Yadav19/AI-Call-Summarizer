@@ -1,230 +1,257 @@
-📞 AI Call Summariser
+📞 AI Call Summariser Agent
 
-An AI-powered call analysis system that processes recorded audio conversations, generates structured summaries, and automatically drafts follow-up messages such as WhatsApp messages or Emails.
+An AI-powered call analysis system that converts audio conversations into structured insights and automatically generates customer-ready follow-up communication (WhatsApp / Email).
 
-The system converts speech into text using Speech-to-Text (STT), analyzes the transcript using a Large Language Model (LLM), and produces actionable outputs for business communication.
+The system supports dual Speech-to-Text (STT) backends:
 
-This project is designed for sales calls, customer support calls, meeting recordings, and CRM workflows where quick insights and follow-up communication are required.
+⚡ AI4Bharat (Local Inference) — Fast, offline, experimental
 
-🚀 Features
+☁️ Sarvam AI (Batch API) — Scalable, production-ready
 
-✔ Upload call recording audio
+🚀 Overview
 
-✔ Automatic Speech-to-Text transcription
+This system processes call recordings through a complete AI pipeline:
 
-✔ Clean transcript generation
+🎙 Convert speech → text (STT)
 
-✔ AI-generated call summary
+🧠 Analyze transcript using LLM
 
-✔ Draft WhatsApp follow-up message
+✉️ Generate actionable outputs
 
-✔ Draft Email follow-up message
+✔ Call Summary
+✔ WhatsApp Follow-up
+✔ Email Draft
 
-✔ Modular backend architecture
+✨ Features
 
-✔ Environment-based configuration
+📤 Upload call recordings
 
-✔ FastAPI API backend
+🔄 Dual STT backend support (AI4Bharat / Sarvam)
 
-✔ Simple web interface for testing
+📝 Clean transcript generation
+
+🧠 AI-powered call summarization
+
+💬 WhatsApp draft generation
+
+📧 Email draft generation
+
+⏱ Latency tracking (STT + LLM)
+
+⚙️ Environment-based configuration
+
+⚡ FastAPI backend (production-ready)
+
+🎨 Clean UI for testing & demo
 
 🧠 System Workflow
-
+            
             User Uploads Audio
-                    │      
-            Speech-to-Text Engine
                     │
-            Transcript Generation
+                    ▼
+               STT Engine (Selectable)
+               ├── AI4Bharat (Local)
+               └── Sarvam (Batch API)
                     │
-            LLM Analysis
+                    ▼
+               Transcript Generation
+                    │
+                    ▼
+               LLM Processing (Gemini)
                     │
                     ├── Call Summary
-                    │
-                    ├── WhatsApp Message Draft
-                    │
+                    ├── WhatsApp Draft
                     └── Email Draft
-🏗 Project Architecture
-
-        ai-call-summariser
-        │
-        ├── app
-        │   │
-        │   ├── main.py                # FastAPI application entry
-        │   ├── config.py              # Environment configuration
-        │   ├── prompts.py             # LLM prompt templates
-        │   ├── schemas.py             # API response schemas
-        │   ├── utils.py               # Utility helpers
-        │   ├── latency_tracker.py     # Latency monitoring
-        │   │
-        │   ├── stt_engine.py          # Speech-to-Text engine
-        │   ├── llm_engine.py          # LLM summarization & drafting
-        │   │
-        │   ├── templates
-        │   │   └── index.html         # Frontend upload interface
-        │   │
-        │   └── static
-        │       └── style.css          # UI styling
-        │
-        ├── uploads                    # Uploaded audio files
-        │
-        ├── run.py                     # Application launcher
-        ├── requirements.txt           # Python dependencies
-        ├── .env                       # Environment variables
-        ├── .env.example               # Example environment config
-        ├── .gitignore
-        └── README.md
-⚙️ Technology Stack
-
-       Component            | Technology            
-       -------------------- | --------------------- 
-       Backend API          | FastAPI               
-       Programming Language | Python                
-       Speech Recognition   | STT Model             
-       Language Model       | LLM                   
-       Frontend             | HTML / CSS            
-       Configuration        | Environment Variables 
-
-
-📦 Installation Guide
-
-1️⃣ Clone the Repository
-  
-    git clone https://github.com/yourusername/ai-call-summariser.git
-    cd ai-call-summariser
-  
-2️⃣ Create Virtual Environment
-
-      python -m venv .venv
-
-3️⃣ Activate Environment
-   
-    Windows
-    .venv\Scripts\activate
-    Linux / Mac
-    source .venv/bin/activate
-
-4️⃣ Upgrade Pip
-    
-    pip install --upgrade pip
-5️⃣ Install Dependencies
         
-    pip install -r requirements.txt
-🔐 Environment Configuration
+🌿 Branch Strategy
 
-Create a .env file in the root directory.
-Example:
+Branch	Description
 
-    APP_NAME=AI Call Summariser
-    APP_VERSION=1.0.0
-    
-    HOST=0.0.0.0
-    PORT=8000
-    
-    UPLOAD_DIR=uploads
-    
-    GEMINI_API_KEY=your_api_key
-    GEMINI_MODEL=gemini-3-flash-preview
-    
-▶️ Running the Application
+main	AI4Bharat STT (Local inference, no API needed)
 
-Start the server:
-    
-    python run.py
+sarvam	Sarvam Batch STT (Production, long audio support)
 
-If successful, you will see:
+⚙️ Tech Stack
 
-    Uvicorn running on http://127.0.0.1:8000
-    
-🌐 Access the Application
-Open your browser:
+            | Component  | Technology         |
+            | ---------- | ------------------ |
+            | Backend    | FastAPI            |
+            | Language   | Python             |
+            | STT Models | AI4Bharat / Sarvam |
+            | LLM        | Gemini             |
+            | Frontend   | HTML + CSS         |
+            | Config     | dotenv             |
 
-    http://localhost:8000
 
-📄 How to Use
 
-1 Open the web interface
+📦 Installation
+1️⃣ Clone Repository
 
-2 Upload an audio call recording
+            git clone https://github.com/yourusername/ai-call-summariser.git
+            cd ai-call-summariser
+2️⃣ Select Branch
 
-3 Choose output format
+👉 AI4Bharat (Local STT)
 
-    > WhatsApp message   
-    >Email draft
+            git checkout main
 
-4 Click Generate
+👉 Sarvam (Cloud STT)
 
-The system will return:
+            git checkout sarvam
+            
+3️⃣ Create Virtual Environment
 
-Transcript
+            python -m venv .venv
+4️⃣ Activate Environment
 
-Call summary
+Windows
 
-Generated follow-up message
+            .venv\Scripts\activate
 
-📊 Example Output
+Mac/Linux
 
-Transcript
+            source .venv/bin/activate
+5️⃣ Install Dependencies
+            
+            pip install -r requirements.txt
+🔐 Environment Setup
 
-    Customer discussed mutual fund investment options and requested details for long-term plans.
-Summary
+Create .env file:
 
-    Customer showed interest in long-term mutual fund investment plans and requested additional information about suitable options.
-WhatsApp Draft
+            APP_NAME=AI Call Summariser
+            APP_VERSION=1.0.0
+            
+            HOST=0.0.0.0
+            PORT=8000
+            
+            UPLOAD_DIR=uploads
+            TRANSCRIPT_DIR=transcripts
+            
+            GEMINI_API_KEY=your_api_key
+            GEMINI_MODEL=gemini-3-flash-preview
 
-    Hello, thank you for speaking with us today. As discussed, I will share the mutual fund investment options suitable for your long-term goals. Please let me know if you would like to proceed or need further clarification.
+🔹 Sarvam Branch 
+            
+            SARVAM_API_KEY=your_sarvam_api_key
+            SARVAM_MODEL=saaras:v3
 
-📁 Development Workflow
+▶️ Run the App
 
-Whenever you start development:
+            python run.py
+            
+🌐 Access UI
 
-Activate environment
-   
-      .venv\Scripts\activate
-Run project
-      
-      python run.py
-Stop server
-    
-    
-    CTRL + C
+            http://localhost:8000
+            
+📄 How It Works
 
-    
-🧩 Future Improvements
+1 Upload audio file
 
-• Multilingual call support
+2 Select output type
 
-• Audio preprocessing and noise removal
+    WhatsApp
+      |
+    Email
 
-• CRM integration
+Click Generate Output
 
-• Database storage for call history
+📊 Sample Output
 
-• Authentication system
+📝 Transcript
 
-• Docker containerization
+            Customer discussed mutual fund investment options...
 
-• Real-time streaming transcription
+📌 Summary
+            
+            Customer showed interest in long-term investment plans...
 
-• Automated follow-up scheduling
+💬 WhatsApp Draft
+
+            Hello, thank you for speaking with us today...
+
+⚡ Performance Insights
+           
+            | Metric         | Value    |
+            | -------------- | -------- |
+            | STT Latency    | ~15s–60s |
+            | LLM Summary    | ~8s      |
+            | Email Draft    | ~25s     |
+            | WhatsApp Draft | ~7s      |
+
+🔍 Branch Comparison
+
+            | Feature          | AI4Bharat | Sarvam    |
+            | ---------------- | --------- | --------- |
+            | Mode             | Local     | Cloud     |
+            | Setup            | Complex   | Easy      |
+            | Speed            | Fast      | Medium    |
+            | Audio Length     | Limited   | Unlimited |
+            | Production Ready | Medium    | High      |
+
+
+📁 Project Structure
+            
+            ai-call-summariser
+            │
+            ├── app
+            │   ├── main.py
+            │   ├── config.py
+            │   ├── prompts.py
+            │   ├── schemas.py
+            │   ├── utils.py
+            │   ├── latency_tracker.py
+            │   ├── stt_engine.py
+            │   ├── llm_engine.py
+            │   │
+            │   ├── templates
+            │   └── static
+            │
+            ├── uploads
+            ├── transcripts
+            ├── run.py
+            ├── requirements.txt
+            ├── .env
+            └── README.md
+            
+🔄 Development Workflow
+
+            .venv\Scripts\activate
+            python run.py
+              CTRL + C
+🧩 Future Enhancements
+
+  🌍 Multilingual support
+
+  🎧 Audio noise cleaning
+
+ ⚡ Real-time streaming STT
+
+ 🗄 Database integration
+
+ 🔐 Authentication
+
+🐳 Docker deployment
+
+📅 Auto follow-up scheduling
 
 📌 Use Cases
 
-This system can be used for:
-
-• 📊 Sales call analysis
-
-• 🎧 Customer support automation
-
-• 📝 Meeting summarisation
-
-• 🤝 CRM communication workflows
-
-• 📁 Business call documentation
+   📊 Sales call analysis
+            
+   🎧 Customer support automation
+            
+   📝 Meeting summarisation
+   
+   🤝 CRM workflows
+             
+   📁 Call documentation
 
 👨‍💻 Author
 
 Priyanshu Yadav
-
 AI / ML Engineer
+India 🇮🇳
 
-India
+🧠 Resume Highlight
+
+Built a production-ready AI call analysis system with dual STT backends (AI4Bharat & Sarvam), enabling scalable transcription, summarization, and automated communication workflows.
