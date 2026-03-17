@@ -18,7 +18,9 @@ uploads/*
 
 # Logs
 *.log
-
+transcripts/
+uploads/
+.env
 # IDE
 .vscode/
 .idea/
