@@ -16,9 +16,11 @@ class Settings:
     GEMINI_API_KEY: str = os.getenv("GEMINI_API_KEY", "")
     GEMINI_MODEL: str = os.getenv("GEMINI_MODEL", "gemini-3-flash-preview")
 
-    HF_TOKEN: str = os.getenv("HF_TOKEN", "")
+    SARVAM_API_KEY: str = os.getenv("SARVAM_API_KEY", "")
+    SARVAM_MODEL: str = os.getenv("SARVAM_MODEL", "saaras:v3")
 
     UPLOAD_DIR: str = os.getenv("UPLOAD_DIR", "uploads")
+    TRANSCRIPT_DIR: str = os.getenv("TRANSCRIPT_DIR", "transcripts")  # ✅ ADD THIS
     MAX_FILE_SIZE_MB: int = int(os.getenv("MAX_FILE_SIZE_MB", "50"))
 
 
