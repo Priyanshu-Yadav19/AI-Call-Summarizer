@@ -9,5 +9,5 @@ requests
 soundfile==0.13.1
 numpy==1.26.4
 librosa==0.10.2.post1
-
+imageio-ffmpeg==0.6.0 
 sarvamai

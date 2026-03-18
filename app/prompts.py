@@ -27,11 +27,11 @@ Call Summary:
 Purpose of Call:
 (Write 1 short sentence only.)
 
-# Key Business Details:
-# - Products discussed:
-# - Software mentioned:
-# - Team size:
-# - Clients handled:
+Key Business Details:
+- Products discussed:
+- Software mentioned:
+- Team size:
+- Clients handled:
 
 Important Information:
 - Meeting / demo schedule:
