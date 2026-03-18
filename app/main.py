@@ -7,7 +7,7 @@ import traceback
 
 from app.config import settings
 from app.schemas import ProcessResponse
-from app.utils import save_upload_file, ensure_upload_dir
+from app.utils import save_upload_file, ensure_upload_dir, convert_to_wav
 from app.latency_tracker import LatencyTracker
 from app.stt_engine import SarvamSTT
 from app.llm_engine import LLMEngine
@@ -69,7 +69,9 @@ async def process_audio(
         print(f"File saved successfully: {file_path}")
 
         latency.start("stt_latency")
-        transcript = stt_engine.transcribe(file_path)
+        processed_audio_path = convert_to_wav(file_path)
+        print(f"Converted audio path: {processed_audio_path}")
+        transcript = stt_engine.transcribe(processed_audio_path)
         latency.end("stt_latency")
         print("STT completed successfully.")
         print(f"Transcript preview: {transcript[:300] if transcript else 'EMPTY'}")
@@ -121,10 +123,10 @@ async def process_audio(
 
         error_text = str(e)
 
-        if "maximum limit of 30 seconds" in error_text or "Please use the batch API" in error_text:
+        if "FFmpeg is not installed" in error_text:
             raise HTTPException(
-                status_code=400,
-                detail="This audio is longer than 30 seconds. Current Sarvam STT route supports only short audio. Use batch STT for long call recordings."
+                status_code=500,
+                detail="FFmpeg is not installed or not available in PATH. Install FFmpeg to process MP4, M4A, and WEBM files."
             ) from e
 
         raise HTTPException(status_code=500, detail=f"Internal error: {error_text}") from e

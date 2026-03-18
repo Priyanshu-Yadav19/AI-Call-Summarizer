@@ -1,7 +1,11 @@
 import os
 import uuid
+import subprocess
 from pathlib import Path
+
+import imageio_ffmpeg as ffmpeg
 from fastapi import UploadFile
+
 from app.config import settings
 
 
@@ -51,3 +55,48 @@ async def save_upload_file(upload_file: UploadFile) -> str:
         f.write(content)
 
     return file_path
+
+
+def convert_to_wav(input_path: str) -> str:
+    """
+    Convert supported input files to mono 16kHz WAV for STT
+    using the FFmpeg binary provided by imageio-ffmpeg.
+    """
+    input_path_obj = Path(input_path)
+    output_path = str(input_path_obj.with_suffix("")) + "_converted.wav"
+
+    try:
+        ffmpeg_path = ffmpeg.get_ffmpeg_exe()
+    except Exception as e:
+        raise ValueError(
+            "FFmpeg binary could not be loaded. Install it with: pip install imageio[ffmpeg]"
+        ) from e
+
+    command = [
+        ffmpeg_path,
+        "-y",
+        "-i", input_path,
+        "-vn",
+        "-ac", "1",
+        "-ar", "16000",
+        "-f", "wav",
+        output_path,
+    ]
+
+    try:
+        subprocess.run(
+            command,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+            check=True,
+        )
+    except subprocess.CalledProcessError as e:
+        raise ValueError(
+            f"Audio conversion failed: {e.stderr.strip() or 'Unknown FFmpeg error'}"
+        ) from e
+
+    if not os.path.exists(output_path):
+        raise ValueError("Converted WAV file was not created.")
+
+    return output_path
