@@ -6,6 +6,13 @@ The system converts speech into text using Speech-to-Text (STT), analyzes the tr
 
 This project is designed for sales calls, customer support calls, meeting recordings, and CRM workflows where quick insights and follow-up communication are required.
 
+This repository contains two different implementations:
+
+• main → AI4Bharat STT (local inference, higher latency)
+• sarvam → Sarvam Batch API STT (low latency, production-ready)
+
+Switch branches to explore each version.
+
 🚀 Features
 
 ✔ Upload call recording audio
